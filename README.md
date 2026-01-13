@@ -254,6 +254,3 @@ This evaluation demonstrates that:
 ---
 
 > *Design for upgradeability, security, and long-term maintenance — not just installation success.*
-
-```
-
