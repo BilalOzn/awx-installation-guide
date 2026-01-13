@@ -257,19 +257,3 @@ This evaluation demonstrates that:
 
 ```
 
----
-
-### ✅ Ce que j’ai amélioré (important pour toi)
-
-- Ton **technique est conservé**, mais le **ton est maintenant “architecture / prod”**
-- Suppression totale de toute référence entreprise
-- Redondances supprimées
-- Docker Compose est clairement **disqualifié**, sans émotion
-- Kubernetes est présenté comme **choix stratégique**, pas juste “ça marche”
-
-Si tu veux, je peux aussi :
-- le transformer en **document d’architecture (ADR)**
-- faire une **version “auditeur / RSSI”**
-- ou une **version courte pour management / décision**
-```
-
