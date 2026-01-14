@@ -159,9 +159,9 @@ kubectl apply -k .
 
 | Method                    | Supported | Secure | Maintainable | Production |
 | ------------------------- | --------- | ------ | ------------ | ---------- |
-| Ansible Playbook          | ❌         | ❌      | ❌            | ❌          |
-| Docker Compose            | ❌         | ❌      | ❌            | ❌          |
-| **Kubernetes + Operator** | ✅         | ✅      | ✅            | ✅          |
+| Ansible Playbook          | ❌         | ❌      | ❌            | ❌      |
+| Docker Compose            | ❌         | ❌      | ❌            | ❌      |
+| **Kubernetes + Operator** | ✅         | ✅      | ✅            | ✅      |
 
 ---
 
