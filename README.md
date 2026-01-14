@@ -292,11 +292,7 @@ For production deployments, it is strongly recommended to **build and maintain c
 In production environments, **collections must always be pinned to specific versions** using a `requirements.yml` file.  
 This guarantees deterministic behavior across Execution Environments and prevents unexpected breaking changes.
 
-Exemple requirements.yml
-
----
-
-## collections:
+### Exemple collectios/requirements.yml
 ```bash  
   # Cisco IOS
   - name: cisco.ios
@@ -315,9 +311,9 @@ Exemple requirements.yml
     version: "9.5.0"
 ```
 
-📌 Recommandation
+📌 Recommendation
 
-Toujours verrouiller les collections de version. Ne comptez jamais sur eux en production.latest
+Always version-lock collections. Never rely on in production.latest
 
 ---
 
@@ -325,8 +321,6 @@ Toujours verrouiller les collections de version. Ne comptez jamais sur eux en pr
 
 Some Ansible modules and collections require additional Python libraries.  
 These dependencies must be declared explicitly in a `requirements.txt` file when building a custom Execution Environment.
-
----
 
 ## Exemple requirements.txt
 ```bash
@@ -337,6 +331,7 @@ paramiko==3.4.0
 # Cisco / Network libraries (optional)
 netmiko
 ```
+
 ---
 
 📌 Note
