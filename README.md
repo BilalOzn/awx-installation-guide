@@ -332,8 +332,6 @@ paramiko==3.4.0
 netmiko
 ```
 
----
-
 📌 Note
 
 Only include libraries that are strictly required.
@@ -355,10 +353,11 @@ Keeping the EE minimal reduces image size, attack surface, and build time.
 
 ---
 
+> *Design for upgradeability, security, and long-term maintenance — not just installation success.*
+
+---
+
 ## ✍ Author
 
 **OUAZENE Bilal**
 
----
-
-> *Design for upgradeability, security, and long-term maintenance — not just installation success.*
