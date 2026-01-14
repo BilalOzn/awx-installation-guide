@@ -238,12 +238,122 @@ This evaluation demonstrates that:
 
 ---
 
+## 📚 Platform & Kubernetes References
+
+The following references provide authoritative documentation for the underlying platform used to deploy AWX in production.
+
+- **k3s – Installation Guide**  
+  https://docs.k3s.io/installation  
+  Official documentation for installing and configuring k3s, a lightweight and production-ready Kubernetes distribution.
+
+- **Kubernetes Release Lifecycle**  
+  https://kubernetes.io/releases/  
+  Overview of supported Kubernetes versions, release cadence, and end-of-life timelines.  
+  Useful to align AWX deployments with supported Kubernetes versions.
+
+---
+
+## 🧩 Custom Execution Environments (EE)
+
+By default, AWX ships with a standard Execution Environment (EE) that includes **ansible-core 2.15.x**.  
+While this version is stable, it may be **too conservative for certain use cases**, especially for network automation or newer collections.
+
+For production deployments, it is strongly recommended to **build and maintain custom Execution Environments** in order to:
+
+- Control the Ansible and ansible-core versions
+- Pin collection versions
+- Add Python dependencies required by specific modules
+- Ensure reproducibility and long-term stability
+
+---
+
+### 📖 Execution Environment Documentation
+
+- **AWX – Execution Environments User Guide**  
+  https://docs.ansible.com/projects/awx/en/24.6.1/userguide/execution_environments.html  
+  Official guide for creating, managing, and using custom Execution Environments in AWX.
+
+- **Ansible Release & Maintenance Policy**  
+  https://docs.ansible.com/projects/ansible/latest/reference_appendices/release_and_maintenance.html  
+  Describes Ansible and ansible-core release cycles and maintenance windows.
+
+- **Ansible Core Roadmap**  
+  https://docs.ansible.com/projects/ansible/latest/roadmap/ansible_core_roadmap_index.html  
+  Provides visibility into future Ansible core versions and planned changes.
+
+- **Red Hat – Ansible Automation Platform Update Policy**  
+  https://access.redhat.com/support/policy/updates/ansible-automation-platform  
+  Useful reference for enterprises aligning AWX usage with Red Hat supported Ansible versions.
+
+---
+
+## 📦 Managing Ansible Collections
+
+In production environments, **collections must always be pinned to specific versions** using a `requirements.yml` file.  
+This guarantees deterministic behavior across Execution Environments and prevents unexpected breaking changes.
+
+Exemple requirements.yml
+
+---
+
+collections:
+  # Cisco IOS
+  - name: cisco.ios
+    version: "9.2.0"
+
+  # Network base collections
+  - name: ansible.netcommon
+    version: "7.2.0"
+
+  # Utilities
+  - name: ansible.utils
+    version: "5.1.2"
+
+  # General-purpose modules
+  - name: community.general
+    version: "9.5.0"
+
+
+📌 Recommandation
+
+Toujours verrouiller les collections de version. Ne comptez jamais sur eux en production.latest
+
+---
+
+## 🐍 Python Dependencies for Execution Environments
+
+Some Ansible modules and collections require additional Python libraries.  
+These dependencies must be declared explicitly in a `requirements.txt` file when building a custom Execution Environment.
+
+---
+
+Exemple requirements.txt
+# SSH libraries
+ansible-pylibssh==1.2.2
+paramiko==3.4.0
+
+# Cisco / Network libraries (optional)
+netmiko
+
+
+📌 Note
+
+N’incluez que les bibliothèques strictement obligatoires.
+Garder l’EE minimal réduit la taille de l’image, la surface d’attaque et le temps de construction.
+
+---
+
 ## 📄 Metadata
 
 * **AWX Version:** 24.x
 * **AWX Operator:** 2.19.1
 * **Kubernetes:** k3s v1.33.4
 * **Last Review:** January 2026
+
+---
+
+> **Production best practice:**  
+> Treat Execution Environments as immutable, versioned artifacts, just like container images or application releases.
 
 ---
 
