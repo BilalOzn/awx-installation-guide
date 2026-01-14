@@ -296,7 +296,8 @@ Exemple requirements.yml
 
 ---
 
-collections:
+## collections:
+```bash  
   # Cisco IOS
   - name: cisco.ios
     version: "9.2.0"
@@ -312,7 +313,7 @@ collections:
   # General-purpose modules
   - name: community.general
     version: "9.5.0"
-
+```
 
 📌 Recommandation
 
@@ -327,19 +328,21 @@ These dependencies must be declared explicitly in a `requirements.txt` file when
 
 ---
 
-Exemple requirements.txt
+## Exemple requirements.txt
+```bash
 # SSH libraries
 ansible-pylibssh==1.2.2
 paramiko==3.4.0
 
 # Cisco / Network libraries (optional)
 netmiko
-
+```
+---
 
 📌 Note
 
-N’incluez que les bibliothèques strictement obligatoires.
-Garder l’EE minimal réduit la taille de l’image, la surface d’attaque et le temps de construction.
+Only include libraries that are strictly required.
+Keeping the EE minimal reduces image size, attack surface, and build time.
 
 ---
 
