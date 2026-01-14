@@ -341,7 +341,7 @@ This guarantees deterministic behavior across Execution Environments and prevent
 📌 Recommendation
 
 Always version-lock collections. Never rely on in production.latest
-https://quay.io/repository/ansible/awx?tab=tags
+
 ---
 
 ## 🐍 Python Dependencies for Execution Environments
