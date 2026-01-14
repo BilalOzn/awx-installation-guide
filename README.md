@@ -201,7 +201,34 @@ kubectl get pods -n kube-system
 ### 3. Deploy AWX Operator & Instance
 
 ```bash
+mkdir -p ~/awx-operator
+cd ~/awx-operator
 kubectl create namespace awx
+
+cat <<EOF > awx-instance.yaml
+> ---
+> apiVersion: awx.ansible.com/v1beta1
+> kind: AWX
+> metadata:
+>   name: awx
+>   namespace: awx
+> spec:
+>   service_type: NodePort
+>   nodeport_port: 30080
+> EOF
+
+cat <<EOF > kustomization.yaml
+> apiVersion: kustomize.config.k8s.io/v1beta1
+> kind: Kustomization
+> resources:
+>   - github.com/ansible/awx-operator/config/default?ref=2.19.1
+>   - awx-instance.yaml
+> images:
+>   - name: quay.io/ansible/awx-operator
+>     newTag: 2.19.1
+> namespace: awx
+> EOF
+
 kubectl apply -k .
 ```
 
