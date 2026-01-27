@@ -1,0 +1,35 @@
+---
+- name: PLAY BANNER (MOTD|LOGIN|EXEC)
+  hosts: "{{ TARGET }}"
+  gather_facts: false
+  tasks:
+    - name: CONFIGURE BANNER MOTD FROM FILE
+      cisco.ios.ios_banner:
+        banner: motd
+        multiline_delimiter: '#'
+        text: "{{lookup('file', '../temp_files/raw_banner_motd.cfg') }}"  
+        state: present
+      tags: MOTD
+
+    - name: CONFIGURE BANNER LOGIN FROM FILE
+      cisco.ios.ios_banner:
+        banner: login
+        multiline_delimiter: '#'
+        text: "{{lookup('file', '../temp_files/raw_banner_login.cfg') }}"  
+        state: present
+      register: output
+      tags:
+        - LOGIN
+
+    - name: CONFIGURE BANNER EXEC FROM FILE
+      cisco.ios.ios_banner:
+        banner: exec
+        multiline_delimiter: '#'
+        text: "{{lookup('file', '../temp_files/raw_banner_exec.cfg') }}" 
+        state: present
+      tags: EXEC
+
+    - name:  SAVE MODIFICATION
+      cisco.ios.ios_config:
+        save_when: modified
+      tags: SAVE

@@ -1,0 +1,14 @@
+---
+- name: DISPLAY LA RUNNING CONFIG AVEC INFO SYSTEM
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: COLLECTE INFORMATIONS CISCO IOS
+      cisco.ios.ios_facts:
+        gather_subset:
+          - config
+
+    - name: DISPLAY COLLECTE INFORMATIONS
+      ansible.builtin.debug:
+        var: ansible_facts
+

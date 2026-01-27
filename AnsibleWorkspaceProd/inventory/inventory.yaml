@@ -1,0 +1,16 @@
+all: 
+  children: 
+    cisco: 
+      children: 
+        routerIOS: 
+          hosts: 
+            VDH-RTR-EDGE-01:
+            VDH-RTR-EDGE-02:
+            AGA06-RTR-EDGE-01:
+            AGS15-RTR-EDGE-01:
+        switchIOS:
+          hosts:
+            VDH-SW-CORE-01:
+            VDH-SW-CORE-02:
+            VDH-SW-DIST-01:
+            VDH-SW-DIST-02:

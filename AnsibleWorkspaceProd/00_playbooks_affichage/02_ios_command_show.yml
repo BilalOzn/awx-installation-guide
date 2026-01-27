@@ -1,0 +1,15 @@
+---
+- name: PLAY EXECUTE COMMANDS ON MODE PRIVELLEGE
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: RUN COMMAND {{ CMD }}
+      cisco.ios.ios_command:
+        commands:
+          - '{{ CMD }}'
+      register: show_result
+
+    - name: DISPLAY RESULT OF COMMAND {{ CMD }}
+      ansible.builtin.debug:
+        msg:
+          - "{{ show_result.stdout[0] }}"

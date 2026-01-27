@@ -1,0 +1,17 @@
+---
+- name: PLAY BACKUP CONFIG ON CISCO IOS
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: 'CREATE FOLDER FOR BACKUPs WITH PATH {{ PATH }}/{{ NAME_DIRECTORY }}'
+      ansible.builtin.file:
+        path: '{{ PATH }}/{{ NAME_DIRECTORY }}/{{ inventory_hostname }}'
+        state: directory
+        mode: '0755'
+    - name: RETRIEVE CONFIGURATION FILE WITH HORODATA
+      cisco.ios.ios_config:
+        backup: yes
+        backup_options:
+          dir_path: "{{ PATH }}/{{ NAME_DIRECTORY }}/{{ inventory_hostname }}"
+          filename: "{{ inventory_hostname }}_config_{{ lookup('pipe', 'date +%Y-%m-%d@%Hh%M') }}"
+

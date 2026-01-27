@@ -1,0 +1,17 @@
+---
+- name: playbook création de vlan idempotanat (module ios_vlans) 
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: Processus de création de VLAN {{ VLAN_ID }} {{ VLAN_NAME }}
+      cisco.ios.ios_vlans:
+        config:
+          - name: "{{ VLAN_NAME }}"
+            vlan_id: "{{ VLAN_ID }}"
+            state: active
+            shutdown: disabled
+        state: merged
+
+    - name: Processus de sauvgarde
+      cisco.ios.ios_config:
+        save_when: modified

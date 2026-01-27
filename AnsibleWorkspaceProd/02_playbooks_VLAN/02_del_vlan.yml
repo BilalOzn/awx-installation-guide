@@ -1,0 +1,16 @@
+---
+- name: Playbook suppression de VLAN
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    
+    - name: Suppression de VLAN {{ VLAN_ID }}
+      cisco.ios.ios_config:
+        lines:
+          - no vlan {{ VLAN_ID }}
+        save_when: changed
+
+
+
+
+

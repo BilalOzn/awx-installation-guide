@@ -1,0 +1,8 @@
+ansible_host: 10.10.11.2
+
+hostname: 
+  site: BEJA
+  device_type: RTR
+  role: EDGE
+  number: 01
+

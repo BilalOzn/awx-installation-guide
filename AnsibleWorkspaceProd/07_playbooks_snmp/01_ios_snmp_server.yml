@@ -1,0 +1,26 @@
+---
+- name: PLAY CONFIGURATION SNMP SUR LES ÉQUIPEMENT CISCO
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+
+  tasks:
+    - name: PROCESSUS CONFIGURATION SNMP IDEMPOTENT
+      cisco.ios.ios_snmp_server:
+        config:
+          communities:
+            - name: '{{ COMMUNITY_NAME }}'
+              ro: '{{ COMMUNITY_RO }}'
+          location: '{{ LOCATION }}'
+          contact: '{{ CONTACT }}'
+        state: replaced
+
+    - name: PROCESSUS RUN COMMAND SHOW CONFIG SNMP
+      cisco.ios.ios_command:
+        commands:
+          - 'show running-config | section snmp'
+      register: result_show
+
+    - name: DISPLAY SECTION RUNNING CONFIG SNMP
+      ansible.builtin.debug:
+        msg:
+          - "{{ result_show.stdout }}"

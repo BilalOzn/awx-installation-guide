@@ -1,0 +1,17 @@
+---
+- name: 'PLAY DISPLAY (HOSTNAME|VERSION_IOS|SERIALNUMBER|PATH_IMAGE'
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: COLLECTE INFORMATIONS
+      cisco.ios.ios_facts:
+        gather_subset:
+          - min
+
+    - name: DISPLAY INFORMATIONS
+      ansible.builtin.debug:
+        msg:
+          - "HOSTNAME: {{ ansible_facts['net_hostname'] }}"
+          - "VERSION IOS: {{ ansible_facts['net_version'] }}"
+          - "SERIALNUM: {{ ansible_facts['net_serialnum'] }}"
+          - "PATH IMAGE: {{ ansible_facts['net_image'] }}"

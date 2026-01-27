@@ -1,0 +1,8 @@
+ansible_host: 10.10.1.1
+
+hostname: 
+  site: VDH
+  device_type: SW
+  role: DIST
+  number: 01
+

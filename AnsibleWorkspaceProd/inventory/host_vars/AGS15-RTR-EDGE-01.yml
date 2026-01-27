@@ -1,0 +1,8 @@
+ansible_host: 10.10.12.2 
+
+hostname: 
+  site: TIZI
+  device_type: RTR
+  role: EDGE
+  number: 01
+

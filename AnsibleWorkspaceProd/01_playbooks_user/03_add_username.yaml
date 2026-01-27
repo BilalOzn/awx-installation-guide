@@ -1,0 +1,32 @@
+---
+- name: PLAYBOOK AJOUT D'UN UTILISATEUR SUR LES EQUIPEMENT CISCO IOS
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: Processus show command avant l'ajout et la supression des anciens utilisateurs
+      cisco.ios.ios_command:
+        commands:
+          - 'show running | in username'
+      register: output_user
+
+    - name: Processus d'affichage des utilisateur existant avant l'ajout et la suppression des anciens utilsateur
+      ansible.builtin.debug:
+        msg: 
+          - "{{ output_user.stdout[0] }}"
+
+    - name: Processus d'ajout de l'utilisateur
+      cisco.ios.ios_config:
+        lines:
+          - 'username {{ USERNAME }} privilege {{ PRIVILLEGE }} algorithm-type {{ ALGORITHME_TYPE }} secret {{ SECRET }}'
+        save_when: always
+    - name: Processus show command avant l'ajout et la supression des anciens utilisateurs
+      cisco.ios.ios_command:
+        commands:
+          - 'show running | in username'
+      register: output_user
+
+    - name: Processus d'affichage des utilisateur existant avant l'ajout et la suppression des anciens utilsateur
+      ansible.builtin.debug:
+        msg: 
+          - "{{ output_user.stdout[0] }}"
+

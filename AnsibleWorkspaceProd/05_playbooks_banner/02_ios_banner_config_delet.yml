@@ -1,0 +1,28 @@
+---
+- name: REMOVE BANNER IN THE CISCO DEVICE  #C'EST JUSTE UN COMMENTAIRE UN NOM POUR NOTRE PLAYBOOK
+  hosts: '{{ DIMANCHE }}'  #ON CIBLE LE GROUPE CISCO QUI CONTIENT 2 SOUS GROUP ET CHACUN DE CES GROUP CONTIENT DES PÉRÉPHÉRIQUE RÉSEAU
+  gather_facts: false  #ON DISACTIVE LA COLLECTION DES FAITS
+  tasks:
+    # À PARTIR D'ICI ON RENTRE DANS LA PARTIR DISANT UN BLOC DE TACHES 
+    - name: REMOVE BANNER MOTD  # LE NOM DE NOTRE PREMIÈRE TACHE SI ON NE SOUVIENT PAS OU ON SAIT PAS COMMENT SUPPRIMER UNE BANNER AVEC UN MODULE CISCO ALLANT DANS LA DOCUMENTATION DU MODULE CISCO.IOS.IOS_BANNER
+      cisco.ios.ios_banner:
+        banner: motd
+        state: absent
+
+    - name: REMOVE BANNER EXEC  
+      cisco.ios.ios_banner:
+        banner: exec
+        state: absent
+
+    - name: REMOVE BANNER LOGIN  
+      cisco.ios.ios_banner:
+        banner: login
+        state: absent
+
+    - name: SAVE CONFIG 
+      cisco.ios.ios_config:
+        save_when: modified #il sauvegarde seulement si les modification ont réussies
+
+
+
+        

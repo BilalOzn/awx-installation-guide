@@ -1,0 +1,4 @@
+ansible_network_os: cisco.ios.ios
+ansible_user: '{{ vault_ssh_user }}'
+ansible_password: '{{ vault_ssh_password }}'
+ansible_become_password: '{{ vault_enable_password }}'

@@ -1,0 +1,32 @@
+--- 
+- name: UPDATE HOST NAME
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: RECUPERER LES HOSTNAME ACTUEL
+      cisco.ios.ios_hostname:
+        state: gathered
+      register: gathered_output
+
+    - name: AFFICHER HOSTNAME ACTUAL
+      ansible.builtin.debug:
+        var: gathered_output.gathered.hostname
+
+    - name: GENERER LE HOSTNAME SOUHAITER
+      ansible.builtin.set_fact:
+        generate_hostname: "{{ hostname.site }}-{{ hostname.device_type }}-{{ hostname.role }}-{{ hostname.number }}"
+
+    - name: APPLIQUER UPDATE HOSTNAME
+      cisco.ios.ios_hostname:
+        config:
+          hostname: "{{ generate_hostname }}"
+        state: merged
+      register: merged_output 
+
+    - name: AFFICHER LE CHANGEMENT
+      ansible.builtin.debug:
+        msg: "{{ merged_output.before }}, commends: {{merged_output.commands}}"
+
+    - name: SAUVGARDER LES MODIFICATION
+      cisco.ios.ios_config:
+        save_when: modified

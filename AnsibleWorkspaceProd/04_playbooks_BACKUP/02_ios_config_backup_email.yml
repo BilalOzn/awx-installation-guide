@@ -1,0 +1,36 @@
+- name: PLAY SEND EMAIL BACKUP
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  tasks:
+    - name: CREATE FOLDER FOR BACKUPS FOLDER NAME IS {{ NAME_DIRECTORY }}
+      ansible.builtin.file:
+        path: "/opt/semaphore/sharedWorkspace/{{ NAME_DIRECTORY }}"
+        state: directory
+        mode: '0755'
+    - name: RETRIEVE CONFIGURATION FILE ON THE FOLDER NAME {{ NAME_DIRECTORY }}
+      cisco.ios.ios_config:
+        backup: yes
+        backup_options:
+          dir_path: "/opt/semaphore/sharedWorkspace/{{ NAME_DIRECTORY }}"
+          filename: "{{inventory_hostname}}_{{ lookup('pipe', 'date +%Y-%m-%d')}}.txt"
+
+    - name: SEND E-MAIL BACKUP
+      community.general.mail:
+        host: smtp.gmail.com
+        port: 587
+        secure: starttls
+        username: '{{ SENDER }}'
+        password: 'pibjxaqfzevzuizo'
+        to: '{{ TO }}'
+        from: '{{ SENDER }}'
+        subject: "{{inventory_hostname}}_{{ lookup('pipe', 'date +%Y-%m-%d@%H:%M:%S')}}"
+        body: |
+          La config de {{inventory_hostname}} est la suivante:
+          !
+          !
+          !
+        attach: 
+          - "/opt/semaphore/sharedWorkspace/{{ NAME_DIRECTORY }}/{{inventory_hostname}}_{{ lookup('pipe', 'date +%Y-%m-%d')}}.txt"
+      delegate_to: localhost
+          
+

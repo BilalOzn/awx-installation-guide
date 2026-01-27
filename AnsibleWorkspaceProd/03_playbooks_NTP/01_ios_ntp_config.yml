@@ -1,0 +1,31 @@
+---
+- name: Configuration NTP sur Cisco IOS
+  hosts: "{{ TARGET }}"
+  gather_facts: false
+  
+  tasks:
+    - name: Configurer les serveurs NTP
+      cisco.ios.ios_ntp_global:
+        config:
+          servers:
+            - server: "{{ NTP_PREFER }}"
+              prefer: true
+            - server: "{{ NTP_SECONDARY }}"
+        state: replaced
+      tags: conf_ntp
+      
+    - name: Vérification NTP
+      cisco.ios.ios_command:
+        commands:
+          - show running-config | section ntp
+          - show clock detail
+          #- show ntp associations
+          #- show ntp status
+      register: ntp_status
+      tags:
+        - show_ntp
+
+    - name: Afficher le résultat
+      ansible.builtin.debug:
+        var: ntp_status.stdout
+      tags: show_ntp

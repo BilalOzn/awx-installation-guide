@@ -1,0 +1,8 @@
+ansible_host: 192.168.122.10
+
+hostname: 
+  site: VDH
+  device_type: RTR
+  role: EDGE
+  number: 02
+
