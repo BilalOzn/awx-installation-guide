@@ -1,0 +1,41 @@
+---
+- name: PLAY BACKUP CONFIG TFTP ON CISCO IOS
+  hosts: '{{ TARGET }}'
+  gather_facts: false
+  serial:
+    - "20%"
+    - "20%"
+    - "20%"
+    - "20%"
+    - "20%"
+
+  tasks:
+    - name: 'CREATE FOLDER FOR BACKUPs WITH PATH {{ PATH }}/{{ NAME_DIRECTORY }}'
+      ansible.builtin.file:
+        path: '{{ PATH }}/{{ NAME_DIRECTORY }}/{{ inventory_hostname }}'
+        state: directory
+        mode: '0755'
+      delegate_to: tftp_server
+
+    - name: 'CREATE file FOR BACKUPs WITH PATH {{ PATH }}/{{ NAME_DIRECTORY }}'
+      ansible.builtin.file:
+        path: "{{ PATH }}/{{ NAME_DIRECTORY }}/{{ inventory_hostname }}/{{ inventory_hostname }}_config_{{ lookup('pipe', 'date +%Y-%m-%d@%Hh%M') }}.cfg"
+        state: touch
+        mode: '0666'
+      delegate_to: tftp_server
+
+    - name: Copier la configuration en TFTP depuis le routeur
+      cisco.ios.ios_command:
+        commands:
+          - command: "copy running-config tftp://{{ TFTP_SERVER }}/{{ NAME_DIRECTORY }}/{{ inventory_hostname }}/{{ inventory_hostname }}_config_{{ lookup('pipe', 'date +%Y-%m-%d@%Hh%M') }}.cfg"
+            prompt: 
+              - 'Address or name of remote host'
+              - 'Destination filename'
+            answer:
+              - "\r"  # Press Enter to confirm
+              - "\r"  # Press Enter to confirm
+      register: tftp_result
+      
+    - name: Display TEFT_RESULT
+      ansible.builtin.debug:
+        var: tftp_result.stdout
