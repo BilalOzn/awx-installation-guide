@@ -1,0 +1,44 @@
+---
+- name: CONFIGURATION SNMP AVEC MODULE IOS_SNMP_SERVER
+  hosts: '{{ TARGET }}'
+  gather_facts: false  
+  tasks:
+    - name: CONFIGURER SNMP SERVER
+      cisco.ios.ios_snmp_server:
+        config:
+          communities:
+            - name: "{{ SNMP_COMMUNITY_RO }}"
+              ro: true
+          
+          groups:
+            - group: "{{ SNMP_GROUP }}"
+              version: v3
+              version_option: auth
+          
+          users:
+            - username: "{{ SNMP_USER }}"
+              group: "{{ SNMP_GROUP }}"
+              version: v3
+              authentication:
+                algorithm: md5
+                password: "{{ SNMP_AUTH_PASS }}"
+              encryption:
+                priv: aes
+                priv_option: 128
+                password: "{{ SNMP_PRIV_PASS }}"
+        state: merged
+      register: snmp_config
+
+    - name: RUN SHOW COMMANDE SNMP
+      cisco.ios.ios_command:
+        commands:
+          - show running-config | section snmp
+          - show snmp user  
+      register: snmp_show
+    
+    - name: AFFICHER LE RÉSULTAT
+      ansible.builtin.debug:
+        msg: 
+          - "Configuration SNMP appliquée"
+          - "Changed: {{ snmp_config.changed }}"
+          - "{{ snmp_show.stdout_lines }}"
