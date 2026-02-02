@@ -9,14 +9,14 @@
         state: directory
         mode: "0755"
 
-    - name: RECUPERER LES BACKUP AU NIVEAU DES EQUIPEMENT
+    - name: RECUPERER LES BACKUP À PARTIR DES EQUIPEMENTS
       cisco.ios.ios_config:
         backup: yes
         backup_options:
             dir_path: /home/semaphore/{{ NAME_DIRECTORY }}/{{ inventory_hostname }}
-            filename: "{{inventory_hostname}}_{{ lookup('pipe', 'date +%Y-%m-%d')}}.txt"
+            filename: "{{inventory_hostname}}_{{ lookup('pipe', 'date +%Y-%m-%d-%Hh%Mm')}}.txt"
 
-- name: Backup to SFTP server (pure SFTP)
+- name: BACKUP VERS SFTP SERVER (PURE SFTP)
   hosts: localhost
   gather_facts: no
   vars:
@@ -25,7 +25,7 @@
     remote_backup_dir: "/cisco"  # Chemin relatif car chroot à /data/sftp
   
   tasks:
-    - name: Create SFTP batch file
+    - name: CREATION BATCH FILE SFTP
       ansible.builtin.copy:
         dest: "/tmp/sftp_commands.txt"
         content: |
@@ -33,7 +33,7 @@
           put -r {{ local_backup_dir }}/* .
           quit          
 
-    - name: Execute SFTP upload
+    - name: EXECUTION UPLOAD SFTP
       ansible.builtin.command:
         cmd: >
           sftp -i {{ sftp_key }}
@@ -43,10 +43,16 @@
       register: sftp_result
       changed_when: true
 
-    - name: Clean up batch file
+    - name: NETOYER LE BATCH FILE
       ansible.builtin.file:
         path: "/tmp/sftp_commands.txt"
         state: absent
+
+    - name: NETOYER LES BACKUP LOCAL APRÈS UPLOAD
+      ansible.builtin.file:
+        path: /home/semaphore/{{ NAME_DIRECTORY }}
+        state: absent
+      when: sftp_result.rc == 0
 
     - name: Display result
       ansible.builtin.debug:
